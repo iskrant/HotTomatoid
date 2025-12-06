@@ -54,11 +54,17 @@ Item {
 
         MouseArea {
             anchors.fill: parent
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
             onClicked: {
-                running = !running
-                countdownTimer.running = running
+                if (mouse.button === Qt.LeftButton) {
+                    running = !running
+                    countdownTimer.running = running
+                }
             }
             onWheel: {
+                wheel.accepted = true
+                // Сбрасываем секунды при изменении времени
+                seconds = 0
                 if (wheel.angleDelta.y > 0) {
                     // Вверх - добавляем минуту
                     if (minutes < 99) {
@@ -73,6 +79,10 @@ Item {
                 // Обновляем отображение
                 Plasmoid.toolTipMainText = "🕓" + formatTime(minutes, seconds)
                 compactText.text = "🕓" + formatTime(minutes, seconds)
+                // Убеждаемся, что таймер остаётся в том же состоянии
+                if (!running) {
+                    countdownTimer.running = false
+                }
             }
         }
     }
@@ -105,11 +115,17 @@ Item {
 
         MouseArea {
             anchors.fill: parent
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
             onClicked: {
-                running = !running
-                countdownTimer.running = running
+                if (mouse.button === Qt.LeftButton) {
+                    running = !running
+                    countdownTimer.running = running
+                }
             }
             onWheel: {
+                wheel.accepted = true
+                // Сбрасываем секунды при изменении времени
+                seconds = 0
                 if (wheel.angleDelta.y > 0) {
                     // Вверх - добавляем 5 минут
                     if (minutes < 95) {
@@ -129,6 +145,10 @@ Item {
                 Plasmoid.toolTipMainText = "🕓" + formatTime(minutes, seconds)
                 fullText.text = "🕓" + formatTime(minutes, seconds)
                 compactText.text = "🕓" + formatTime(minutes, seconds)
+                // Убеждаемся, что таймер остаётся в том же состоянии
+                if (!running) {
+                    countdownTimer.running = false
+                }
             }
         }
     }
