@@ -7,7 +7,7 @@ Item {
     id: root
 
     property int minutes: 35
-    property int seconds: 0
+    property int seconds: 1
     property bool running: false
     property string displayTime: formatTime(minutes, seconds)
 
@@ -173,6 +173,8 @@ Item {
 
             title: "Time to Relax!"
             visibility: Window.FullScreen
+            width: 800
+            height: 600
             color: PlasmaCore.Theme.backgroundColor
             flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
 

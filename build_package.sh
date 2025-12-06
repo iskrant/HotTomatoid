@@ -45,6 +45,9 @@ if [ -f "$OUTPUT_FILE" ]; then
     echo "2. Выберите 'Добавить виджеты...'"
     echo "3. Найдите HotTomatoid в списке"
     echo "4. Перетащите на панель задач"
+    echo "5. Для отладки: kquitapp5 plasmashell && plasmashell &"
+    plasmapkg2 -u HotTomatoid.plasmoid
+
 else
     echo "❌ Ошибка: Не удалось создать пакет"
     exit 1
