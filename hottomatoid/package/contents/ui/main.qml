@@ -7,7 +7,7 @@ Item {
     id: root
 
     property int minutes: 35
-    property int seconds: 6
+    property int seconds: 4
     property bool running: false
     property string displayTime: formatTime(minutes, seconds)
 
@@ -27,11 +27,15 @@ Item {
         return mins.toString().padStart(2, '0') + ":" + secs.toString().padStart(2, '0')
     }
 
+    function resetMainTimer() {
+        minutes = 25
+        seconds = 0
+        updateTimeDisplay()
+    }
+
     function updateTimeDisplay() {
         displayTime = formatTime(minutes, seconds)
         Plasmoid.toolTipMainText = "🕓" + displayTime
-        compactText.text = "🕓" + displayTime
-        fullText.text = "🕓" + displayTime
     }
 
     Timer {
@@ -227,7 +231,7 @@ Item {
 
             Rectangle {
                 anchors.fill: parent
-                color: Qt.rgba(29, 131, 68, 0.8)
+                color: Qt.rgba(33, 142, 156, 0.8)
 
                 Column {
                     anchors.centerIn: parent
@@ -237,7 +241,7 @@ Item {
                         text: "Go to RelaX!"
                         font.pixelSize: 80
                         font.bold: true
-                        color: "#5f1899ff"
+                        color: "#d33f3aff"
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
@@ -302,18 +306,16 @@ Item {
                 if (visible) {
                     resetBreakTimer()
                     breakTimer.running = true
+                } else if (root) {
+                    // Окно скрылось, запускаем основной таймер
+                    console.log("BreakWindow hidden, starting main timer")
+                    root.startAfterBreak()
                 }
             }
 
             onClosing: {
-                root.minutes = 25
-                root.seconds = 0
-                root.updateTimeDisplay()
-                // Запускаем таймер с небольшой задержкой, чтобы убедиться что все изменения применились
-                Qt.callLater(function() {
-                    root.running = true
-                    root.countdownTimer.running = true
-                })
+                console.log("BreakWindow closing")
+                root.startAfterBreak()
             }
         }
     }
@@ -325,5 +327,13 @@ Item {
             breakWindow = breakWindowComponent.createObject(root)
         }
         breakWindow.show()
+    }
+
+    function startAfterBreak() {
+        minutes = 35
+        seconds = 0
+        updateTimeDisplay()
+        running = true
+        countdownTimer.running = true
     }
 }
