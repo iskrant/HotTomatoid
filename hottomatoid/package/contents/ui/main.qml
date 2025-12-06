@@ -1,11 +1,12 @@
 import QtQuick 2.15
+import QtQuick.Window 2.15
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
     id: root
 
-    property int minutes: 45
+    property int minutes: 35
     property int seconds: 0
     property bool running: false
     property string displayTime: formatTime(minutes, seconds)
@@ -40,6 +41,8 @@ Item {
                 if (minutes === 0) {
                     running = false
                     countdownTimer.running = false
+                    // Показываем окно отдыха
+                    showBreakWindow()
                     return
                 }
                 minutes--
@@ -156,5 +159,136 @@ Item {
                 }
             }
         }
+    }
+
+    // Компонент окна для отдыха
+    Component {
+        id: breakWindowComponent
+
+        Window {
+            id: breakWindow
+
+            property int breakMinutes: 5
+            property int breakSeconds: 0
+
+            title: "Time to Relax!"
+            visibility: Window.FullScreen
+            color: PlasmaCore.Theme.backgroundColor
+            flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+
+            Timer {
+                id: breakTimer
+                interval: 1000
+                running: true
+                repeat: true
+                onTriggered: {
+                    if (breakSeconds === 0) {
+                        if (breakMinutes === 0) {
+                            breakWindow.close()
+                            return
+                        }
+                        breakMinutes--
+                        breakSeconds = 59
+                    } else {
+                        breakSeconds--
+                    }
+                    timeText.text = "🕓" + formatTime(breakMinutes, breakSeconds)
+                }
+            }
+
+            function formatTime(mins, secs) {
+                return mins.toString().padStart(2, '0') + ":" + secs.toString().padStart(2, '0')
+            }
+
+            Rectangle {
+                anchors.fill: parent
+                color: Qt.rgba(235, 145, 10, 0.8)
+
+                Column {
+                    anchors.centerIn: parent
+                    spacing: 50
+
+                    Text {
+                        text: "Go to RelaX!"
+                        font.pixelSize: 80
+                        font.bold: true
+                        color: "#e6e2daff"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    Text {
+                        id: timeText
+                        text: "🕓" + formatTime(breakMinutes, breakSeconds)
+                        font.pixelSize: 120
+                        font.bold: true
+                        color: PlasmaCore.Theme.textColor
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        MouseArea {
+                            anchors.fill: parent
+                            acceptedButtons: Qt.LeftButton
+                            onClicked: {
+                                breakTimer.running = !breakTimer.running
+                            }
+                            onWheel: {
+                                wheel.accepted = true
+                                breakSeconds = 0
+                                if (wheel.angleDelta.y > 0) {
+                                    if (breakMinutes < 99) breakMinutes++
+                                } else {
+                                    if (breakMinutes > 0) breakMinutes--
+                                }
+                                timeText.text = "🕓" + formatTime(breakMinutes, breakSeconds)
+                            }
+                        }
+                    }
+
+                    Text {
+                        text: breakTimer.running ? "Пауза (клик)" : "Продолжить (клик)"
+                        font.pixelSize: 30
+                        color: PlasmaCore.Theme.textColor
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    Text {
+                        text: "Колёсико мыши для изменения времени"
+                        font.pixelSize: 20
+                        color: PlasmaCore.Theme.disabledTextColor
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+                }
+
+                Text {
+                    text: "✕"
+                    font.pixelSize: 30
+                    color: PlasmaCore.Theme.textColor
+                    anchors.top: parent.top
+                    anchors.right: parent.right
+                    anchors.margins: 20
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: breakWindow.close()
+                    }
+                }
+            }
+
+            onClosing: {
+                root.minutes = 25
+                root.seconds = 0
+                root.running = false
+                root.countdownTimer.running = false
+                root.updateTimeDisplay()
+            }
+        }
+    }
+
+    property var breakWindow: null
+
+    function showBreakWindow() {
+        if (!breakWindow) {
+            breakWindow = breakWindowComponent.createObject(root)
+        }
+        breakWindow.show()
     }
 }
