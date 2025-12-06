@@ -7,7 +7,7 @@ Item {
     id: root
 
     property int minutes: 35
-    property int seconds: 5
+    property int seconds: 6
     property bool running: false
     property string displayTime: formatTime(minutes, seconds)
 
@@ -227,7 +227,7 @@ Item {
 
             Rectangle {
                 anchors.fill: parent
-                color: Qt.rgba(131, 88, 29, 0.8)
+                color: Qt.rgba(29, 131, 68, 0.8)
 
                 Column {
                     anchors.centerIn: parent
@@ -237,7 +237,7 @@ Item {
                         text: "Go to RelaX!"
                         font.pixelSize: 80
                         font.bold: true
-                        color: "#996e18ff"
+                        color: "#5f1899ff"
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
