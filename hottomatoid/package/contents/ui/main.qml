@@ -7,7 +7,7 @@ Item {
     id: root
 
     property int minutes: 35
-    property int seconds: 4
+    property int seconds: 5
     property bool running: false
     property string displayTime: formatTime(minutes, seconds)
 
@@ -198,7 +198,7 @@ Item {
             Timer {
                 id: breakTimer
                 interval: 1000
-                running: true
+                running: false
                 repeat: true
                 onTriggered: {
                     if (breakSeconds === 0) {
@@ -219,9 +219,15 @@ Item {
                 return mins.toString().padStart(2, '0') + ":" + secs.toString().padStart(2, '0')
             }
 
+            function resetBreakTimer() {
+                breakMinutes = 5
+                breakSeconds = 0
+                timeText.text = "🕓" + formatTime(breakMinutes, breakSeconds)
+            }
+
             Rectangle {
                 anchors.fill: parent
-                color: Qt.rgba(235, 145, 10, 0.8)
+                color: Qt.rgba(131, 88, 29, 0.8)
 
                 Column {
                     anchors.centerIn: parent
@@ -231,7 +237,7 @@ Item {
                         text: "Go to RelaX!"
                         font.pixelSize: 80
                         font.bold: true
-                        color: "#e6e2daff"
+                        color: "#996e18ff"
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
@@ -289,6 +295,13 @@ Item {
                         anchors.fill: parent
                         onClicked: breakWindow.close()
                     }
+                }
+            }
+
+            onVisibleChanged: {
+                if (visible) {
+                    resetBreakTimer()
+                    breakTimer.running = true
                 }
             }
 
