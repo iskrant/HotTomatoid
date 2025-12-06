@@ -231,7 +231,8 @@ Item {
 
             Rectangle {
                 anchors.fill: parent
-                color: Qt.rgba(33, 142, 156, 0.8)
+                //color: Qt.rgba(14, 111, 238, 0.73)
+                color: "#3a455a"
 
                 Column {
                     anchors.centerIn: parent
@@ -241,7 +242,7 @@ Item {
                         text: "Go to RelaX!"
                         font.pixelSize: 80
                         font.bold: true
-                        color: "#d33f3aff"
+                        color: "#c26d29"
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
