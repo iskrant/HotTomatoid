@@ -7,7 +7,7 @@ Item {
     id: root
 
     property int minutes: 35
-    property int seconds: 4
+    property int seconds: 5
     property bool running: false
     property string displayTime: formatTime(minutes, seconds)
 
@@ -23,6 +23,11 @@ Item {
     // Разрешаем изменять размер
     Plasmoid.backgroundHints: PlasmaCore.Types.ConfigurableBackground
 
+    // Позволяет плазмоиду быть более компактным
+    Plasmoid.switchWidth: 15
+    Plasmoid.switchHeight: 12
+
+    
     function formatTime(mins, secs) {
         return mins.toString().padStart(2, '0') + ":" + secs.toString().padStart(2, '0')
     }
@@ -65,6 +70,8 @@ Item {
     // Простое компактное представление
     Plasmoid.compactRepresentation: Item {
         id: compactItem
+        //implicitHeight: 16
+        //implicitWidth: 14
 
         Text {
             id: compactText
@@ -79,7 +86,7 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
 
-            // Занимаем почти всё доступное пространство с небольшими отступами
+            // Занимаем почти всё доступное пространство с минимальными отступами
             anchors.fill: parent
             anchors.margins: 2
         }
@@ -130,18 +137,18 @@ Item {
             Text {
                 id: fullText
                 text: "🕓" + displayTime
-                font.pixelSize: 24
+                font.pixelSize: 14
                 font.bold: true
                 color: PlasmaCore.Theme.textColor
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
-            Text {
-                text: running ? "Стоп (клик)" : "Старт (клик)"
-                font.pixelSize: 14
-                color: PlasmaCore.Theme.textColor
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
+            //Text {
+            //   text: running ? "🛑" : "✅"
+            //    font.pixelSize: 14
+            //    color: PlasmaCore.Theme.textColor
+            //    anchors.horizontalCenter: parent.horizontalCenter
+            //}
         }
 
         MouseArea {
