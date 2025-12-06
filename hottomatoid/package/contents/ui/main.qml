@@ -7,7 +7,7 @@ Item {
     id: root
 
     property int minutes: 35
-    property int seconds: 1
+    property int seconds: 4
     property bool running: false
     property string displayTime: formatTime(minutes, seconds)
 
@@ -19,6 +19,9 @@ Item {
 
     // Делаем так, чтобы плазмоид показывал текст на панели
     Plasmoid.preferredRepresentation: Plasmoid.compactRepresentation
+
+    // Разрешаем изменять размер
+    Plasmoid.backgroundHints: PlasmaCore.Types.ConfigurableBackground
 
     function formatTime(mins, secs) {
         return mins.toString().padStart(2, '0') + ":" + secs.toString().padStart(2, '0')
@@ -56,12 +59,26 @@ Item {
     }
 
     // Простое компактное представление
-    Plasmoid.compactRepresentation: Text {
-        id: compactText
-        text: "🕓" + displayTime
-        font.pixelSize: 14
-        font.bold: true
-        color: PlasmaCore.Theme.textColor
+    Plasmoid.compactRepresentation: Item {
+        id: compactItem
+
+        Text {
+            id: compactText
+            text: "🕓" + displayTime
+            font.pixelSize: 14
+            font.bold: true
+            color: PlasmaCore.Theme.textColor
+
+            // Подстраиваем размер под доступное пространство
+            fontSizeMode: Text.Fit
+            minimumPixelSize: 2
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+
+            // Занимаем почти всё доступное пространство с небольшими отступами
+            anchors.fill: parent
+            anchors.margins: 2
+        }
 
         MouseArea {
             anchors.fill: parent
@@ -278,9 +295,12 @@ Item {
             onClosing: {
                 root.minutes = 25
                 root.seconds = 0
-                root.running = false
-                root.countdownTimer.running = false
                 root.updateTimeDisplay()
+                // Запускаем таймер с небольшой задержкой, чтобы убедиться что все изменения применились
+                Qt.callLater(function() {
+                    root.running = true
+                    root.countdownTimer.running = true
+                })
             }
         }
     }
