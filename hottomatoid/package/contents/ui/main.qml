@@ -13,7 +13,7 @@ Item {
 
     // Устанавливаем текст напрямую в заголовок плазмоида
     Plasmoid.toolTipMainText: "🕓" + formatTime(minutes, seconds)
-    Plasmoid.toolTipSubText: "Клик для запуска/остановки таймера"
+    Plasmoid.toolTipSubText: "Клик для запуска/остановки • Колесико для изменения времени"
 
     // Делаем так, чтобы плазмоид показывал текст на панели
     Plasmoid.preferredRepresentation: Plasmoid.compactRepresentation
@@ -46,6 +46,7 @@ Item {
 
     // Простое компактное представление
     Plasmoid.compactRepresentation: Text {
+        id: compactText
         text: "🕓" + formatTime(minutes, seconds)
         font.pixelSize: 14
         font.bold: true
@@ -56,6 +57,22 @@ Item {
             onClicked: {
                 running = !running
                 countdownTimer.running = running
+            }
+            onWheel: {
+                if (wheel.angleDelta.y > 0) {
+                    // Вверх - добавляем минуту
+                    if (minutes < 99) {
+                        minutes++
+                    }
+                } else {
+                    // Вниз - убавляем минуту
+                    if (minutes > 0) {
+                        minutes--
+                    }
+                }
+                // Обновляем отображение
+                Plasmoid.toolTipMainText = "🕓" + formatTime(minutes, seconds)
+                compactText.text = "🕓" + formatTime(minutes, seconds)
             }
         }
     }
@@ -70,6 +87,7 @@ Item {
             spacing: 10
 
             Text {
+                id: fullText
                 text: "🕓" + formatTime(minutes, seconds)
                 font.pixelSize: 24
                 font.bold: true
@@ -90,6 +108,27 @@ Item {
             onClicked: {
                 running = !running
                 countdownTimer.running = running
+            }
+            onWheel: {
+                if (wheel.angleDelta.y > 0) {
+                    // Вверх - добавляем 5 минут
+                    if (minutes < 95) {
+                        minutes += 5
+                    } else {
+                        minutes = 99
+                    }
+                } else {
+                    // Вниз - убавляем 5 минут
+                    if (minutes > 5) {
+                        minutes -= 5
+                    } else {
+                        minutes = 0
+                    }
+                }
+                // Обновляем отображение
+                Plasmoid.toolTipMainText = "🕓" + formatTime(minutes, seconds)
+                fullText.text = "🕓" + formatTime(minutes, seconds)
+                compactText.text = "🕓" + formatTime(minutes, seconds)
             }
         }
     }

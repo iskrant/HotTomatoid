@@ -23,7 +23,17 @@
 
 **Способ 1: Через командную строку**
 ```bash
+
+Чтобы обновить уже установленный плазмоид:
+
+#Upgrade
+plasmapkg2 -u HotTomatoid.plasmoid
+
+#install
 plasmapkg2 -i HotTomatoid.plasmoid
+
+
+kquitapp5 plasmashell && plasmashell &
 ```
 
 **Способ 2: Через файловый менеджер**
