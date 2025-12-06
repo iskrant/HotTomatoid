@@ -8,11 +8,12 @@ Item {
     property int minutes: 45
     property int seconds: 0
     property bool running: false
+    property string displayTime: formatTime(minutes, seconds)
 
     Plasmoid.title: "HotTomatoid"
 
     // Устанавливаем текст напрямую в заголовок плазмоида
-    Plasmoid.toolTipMainText: "🕓" + formatTime(minutes, seconds)
+    Plasmoid.toolTipMainText: "🕓" + displayTime
     Plasmoid.toolTipSubText: "Клик для запуска/остановки • Колесико для изменения времени"
 
     // Делаем так, чтобы плазмоид показывал текст на панели
@@ -20,6 +21,13 @@ Item {
 
     function formatTime(mins, secs) {
         return mins.toString().padStart(2, '0') + ":" + secs.toString().padStart(2, '0')
+    }
+
+    function updateTimeDisplay() {
+        displayTime = formatTime(minutes, seconds)
+        Plasmoid.toolTipMainText = "🕓" + displayTime
+        compactText.text = "🕓" + displayTime
+        fullText.text = "🕓" + displayTime
     }
 
     Timer {
@@ -39,15 +47,15 @@ Item {
             } else {
                 seconds--
             }
-            // Обновляем подсказку при каждом тике
-            Plasmoid.toolTipMainText = "🕓" + formatTime(minutes, seconds)
+            // Обновляем отображение при каждом тике
+            updateTimeDisplay()
         }
     }
 
     // Простое компактное представление
     Plasmoid.compactRepresentation: Text {
         id: compactText
-        text: "🕓" + formatTime(minutes, seconds)
+        text: "🕓" + displayTime
         font.pixelSize: 14
         font.bold: true
         color: PlasmaCore.Theme.textColor
@@ -76,9 +84,8 @@ Item {
                         minutes--
                     }
                 }
-                // Обновляем отображение
-                Plasmoid.toolTipMainText = "🕓" + formatTime(minutes, seconds)
-                compactText.text = "🕓" + formatTime(minutes, seconds)
+                // Обновляем отображение централизованно
+                updateTimeDisplay()
                 // Убеждаемся, что таймер остаётся в том же состоянии
                 if (!running) {
                     countdownTimer.running = false
@@ -98,7 +105,7 @@ Item {
 
             Text {
                 id: fullText
-                text: "🕓" + formatTime(minutes, seconds)
+                text: "🕓" + displayTime
                 font.pixelSize: 24
                 font.bold: true
                 color: PlasmaCore.Theme.textColor
@@ -141,10 +148,8 @@ Item {
                         minutes = 0
                     }
                 }
-                // Обновляем отображение
-                Plasmoid.toolTipMainText = "🕓" + formatTime(minutes, seconds)
-                fullText.text = "🕓" + formatTime(minutes, seconds)
-                compactText.text = "🕓" + formatTime(minutes, seconds)
+                // Обновляем отображение централизованно
+                updateTimeDisplay()
                 // Убеждаемся, что таймер остаётся в том же состоянии
                 if (!running) {
                     countdownTimer.running = false
