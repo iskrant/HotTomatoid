@@ -28,6 +28,12 @@
     "X-KDE-PluginInfo-Name": "org.kde.plasma.hottomatoid",
     "X-KDE-PluginInfo-Version": "1.0",
     "X-KDE-PluginInfo-Website": "https://github.com/user/hottomatoid",
-    "X-Plasma-ConfigPanel": true
-    
+    // tray
+    "X-Plasma-Provides": [
+        "org.kde.plasma.time",
+        "org.kde.plasma.date"
+    ],
+    "X-Plasma-NotificationArea": "true",
+    "X-Plasma-ConfigPanel": true,
+    "X-Plasma-NotificationAreaCategory": "Hardware"
 }

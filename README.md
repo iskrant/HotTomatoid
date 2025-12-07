@@ -52,6 +52,11 @@ kquitapp5 plasmashell && plasmashell &
 - Таймер начинает отсчет с 45:00
 - При достижении 00:00 таймер автоматически останавливается
 
+
+## удалить 
+plasmapkg2 -t plasmoid -r org.kde.plasma.hottomatoid
+
+
 ## Структура проекта
 
 ```
