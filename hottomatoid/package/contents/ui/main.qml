@@ -9,7 +9,7 @@ Item {
     property int minutes: 35
     property int seconds: 0
     property bool running: false
-    property string displayTime
+    property string displayTime: formatTime(minutes, seconds)
 
     Plasmoid.title: "HotTomatoid"
 
@@ -31,6 +31,7 @@ Item {
     // Инициализация при создании
     Component.onCompleted: {
         updateTimeDisplay()
+        console.log("HotTomatoid initialized with time:", displayTime)
     }
 
     function resetMainTimer() {
@@ -42,13 +43,35 @@ Item {
     function updateTimeDisplay() {
         displayTime = formatTime(minutes, seconds)
         Plasmoid.toolTipMainText = "🕓" + displayTime
-        // Обновляем текст в компактном представлении
-        if (compactText) {
-            compactText.text = "🕓" + displayTime
+
+        // Проверяем существование элементов перед обновлением
+        try {
+            // Обновляем текст в компактном представлении
+            if (compactText && typeof compactText.text !== "undefined") {
+                compactText.text = "🕓" + displayTime
+            }
+        } catch (e) {
+            // Игнорируем ошибки если компонент еще не создан
         }
-        // Обновляем текст в полном представлении
-        if (fullText) {
-            fullText.text = "🕓" + displayTime
+
+        try {
+            // Обновляем текст в полном представлении
+            if (fullText && typeof fullText.text !== "undefined") {
+                fullText.text = "🕓" + displayTime
+            }
+        } catch (e) {
+            // Игнорируем ошибки если компонент еще не создан
+        }
+    }
+
+    // Обновляем отображение при изменении времени
+    onMinutesChanged: updateTimeDisplay()
+    onSecondsChanged: updateTimeDisplay()
+    onRunningChanged: {
+        if (running && minutes === 0 && seconds === 0) {
+            // Если запускаем с нулевого времени, устанавливаем значения по умолчанию
+            minutes = 35
+            seconds = 0
         }
     }
 
@@ -73,8 +96,6 @@ Item {
             }
             // Обновляем отображение при каждом тике
             updateTimeDisplay()
-            // Обновляем подсказку напрямую
-            Plasmoid.toolTipMainText = "🕓" + displayTime
         }
     }
 
@@ -108,7 +129,15 @@ Item {
             onClicked: {
                 if (mouse.button === Qt.LeftButton) {
                     running = !running
+                    if (running) {
+                        // Если запускаем таймер, проверяем что время не нулевое
+                        if (minutes === 0 && seconds === 0) {
+                            minutes = 35
+                            seconds = 0
+                        }
+                    }
                     countdownTimer.running = running
+                    console.log("Compact timer clicked, running:", running, "time:", displayTime)
                 }
             }
             onWheel: {
@@ -168,7 +197,15 @@ Item {
             onClicked: {
                 if (mouse.button === Qt.LeftButton) {
                     running = !running
+                    if (running) {
+                        // Если запускаем таймер, проверяем что время не нулевое
+                        if (minutes === 0 && seconds === 0) {
+                            minutes = 35
+                            seconds = 0
+                        }
+                    }
                     countdownTimer.running = running
+                    console.log("Full timer clicked, running:", running, "time:", displayTime)
                 }
             }
             onWheel: {
@@ -225,6 +262,7 @@ Item {
                 onTriggered: {
                     if (breakSeconds === 0) {
                         if (breakMinutes === 0) {
+                            // DEBUG console.log("Break timer finished, closing window")
                             breakWindow.close()
                             return
                         }
@@ -323,36 +361,54 @@ Item {
 
             onVisibleChanged: {
                 if (visible) {
+                    console.log("BreakWindow shown")
                     resetBreakTimer()
                     breakTimer.running = true
-                } else if (root) {
-                    // Окно скрылось, запускаем основной таймер
-                    console.log("BreakWindow hidden, starting main timer")
-                    root.startAfterBreak()
+                    // Сбрасываем флаг при показе окна
+                    if (root) root.breakWindowClosing = false
                 }
             }
 
             onClosing: {
                 console.log("BreakWindow closing")
-                root.startAfterBreak()
+                // Запускаем основной таймер только при закрытии
+                if (root) {
+                    root.startAfterBreak()
+                }
             }
         }
     }
 
     property var breakWindow: null
+    property bool breakWindowClosing: false
 
     function showBreakWindow() {
         if (!breakWindow) {
             breakWindow = breakWindowComponent.createObject(root)
         }
+        breakWindowClosing = false
         breakWindow.show()
     }
 
     function startAfterBreak() {
+        // Защита от множественных вызовов
+        if (breakWindowClosing) {
+            console.log("startAfterBreak already called, skipping")
+            return
+        }
+        breakWindowClosing = true
+
+        console.log("startAfterBreak called")
         minutes = 35
         seconds = 0
-        updateTimeDisplay()
-        running = true
-        countdownTimer.running = true
+
+        // Небольшая задержка перед обновлением UI
+        Qt.callLater(() => {
+            updateTimeDisplay()
+            // Запускаем таймер
+            running = true
+            countdownTimer.running = true
+            console.log("Main timer started after break, time:", displayTime)
+        })
     }
 }
