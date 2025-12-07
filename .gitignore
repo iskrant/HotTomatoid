@@ -1,0 +1,24 @@
+# Build artifacts
+*.plasmoid
+*.zip
+*.tar.gz
+
+# KDE/Qt build files
+build/
+cmake-build*/
+*.pro.user*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*~
