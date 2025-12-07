@@ -76,7 +76,7 @@ Item {
         Text {
             id: compactText
             text: "🕓" + displayTime
-            font.pixelSize: 14
+            font.pixelSize: 16
             font.bold: true
             color: PlasmaCore.Theme.textColor
 
@@ -88,7 +88,7 @@ Item {
 
             // Занимаем почти всё доступное пространство с минимальными отступами
             anchors.fill: parent
-            anchors.margins: 2
+            anchors.margins: 1
         }
 
         MouseArea {
