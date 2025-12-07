@@ -15,7 +15,7 @@ Item {
 
     // Устанавливаем текст напрямую в заголовок плазмоида
     Plasmoid.toolTipMainText: "🕓" + displayTime
-    Plasmoid.toolTipSubText: "Клик для запуска/остановки • Колесико для изменения времени"
+    Plasmoid.toolTipSubText: "Click to start/stop • A wheel to change the time"
 
     // Делаем так, чтобы плазмоид показывал текст на панели
     Plasmoid.preferredRepresentation: Plasmoid.compactRepresentation
@@ -292,14 +292,14 @@ Item {
                     }
 
                     Text {
-                        text: breakTimer.running ? "Пауза (клик)" : "Продолжить (клик)"
+                        text: breakTimer.running ? "Pause (click)" : "Continue (click)"
                         font.pixelSize: 30
                         color: PlasmaCore.Theme.textColor
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
                     Text {
-                        text: "Колёсико мыши для изменения времени"
+                        text: "Mouse wheel to change the time"
                         font.pixelSize: 20
                         color: PlasmaCore.Theme.disabledTextColor
                         anchors.horizontalCenter: parent.horizontalCenter
