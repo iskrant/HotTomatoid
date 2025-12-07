@@ -31,8 +31,10 @@ plasmapkg2 -u HotTomatoid.plasmoid
 
 #install
 plasmapkg2 -i HotTomatoid.plasmoid
+# или сразу добавить на панель
+plasmapkg2 -t plasmoid -i HotTomatoid.plasmoid
 
-
+#  и сразу рестартнуть KDE без логофа
 kquitapp5 plasmashell && plasmashell &
 ```
 
@@ -55,7 +57,7 @@ kquitapp5 plasmashell && plasmashell &
 
 ## удалить 
 plasmapkg2 -t plasmoid -r org.kde.plasma.hottomatoid
-
+kquitapp5 plasmashell && plasmashell &
 
 ## Структура проекта
 

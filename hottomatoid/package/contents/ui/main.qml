@@ -7,9 +7,9 @@ Item {
     id: root
 
     property int minutes: 35
-    property int seconds: 5
+    property int seconds: 7
     property bool running: false
-    property string displayTime: formatTime(minutes, seconds)
+    property string displayTime
 
     Plasmoid.title: "HotTomatoid"
 
@@ -23,13 +23,14 @@ Item {
     // Разрешаем изменять размер
     Plasmoid.backgroundHints: PlasmaCore.Types.ConfigurableBackground
 
-    // Позволяет плазмоиду быть более компактным
-    Plasmoid.switchWidth: 15
-    Plasmoid.switchHeight: 12
-
     
     function formatTime(mins, secs) {
         return mins.toString().padStart(2, '0') + ":" + secs.toString().padStart(2, '0')
+    }
+
+    // Инициализация при создании
+    Component.onCompleted: {
+        updateTimeDisplay()
     }
 
     function resetMainTimer() {
@@ -41,6 +42,14 @@ Item {
     function updateTimeDisplay() {
         displayTime = formatTime(minutes, seconds)
         Plasmoid.toolTipMainText = "🕓" + displayTime
+        // Обновляем текст в компактном представлении
+        if (compactText) {
+            compactText.text = "🕓" + displayTime
+        }
+        // Обновляем текст в полном представлении
+        if (fullText) {
+            fullText.text = "🕓" + displayTime
+        }
     }
 
     Timer {
@@ -64,6 +73,8 @@ Item {
             }
             // Обновляем отображение при каждом тике
             updateTimeDisplay()
+            // Обновляем подсказку напрямую
+            Plasmoid.toolTipMainText = "🕓" + displayTime
         }
     }
 

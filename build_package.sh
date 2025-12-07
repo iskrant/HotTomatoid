@@ -37,7 +37,9 @@ if [ -f "$OUTPUT_FILE" ]; then
     echo ""
     echo "Для установки плагина выполните:"
     echo "plasmapkg2 -i $OUTPUT_FILE"
+    echo " или:"
     echo ""
+    echo "./install.sh"
     echo "Или двойной щелчок по файлу в файловом менеджере"
     echo ""
     echo "После установки:"
@@ -46,8 +48,6 @@ if [ -f "$OUTPUT_FILE" ]; then
     echo "3. Найдите HotTomatoid в списке"
     echo "4. Перетащите на панель задач"
     echo "5. Для отладки: kquitapp5 plasmashell && plasmashell &"
-    plasmapkg2 -u HotTomatoid.plasmoid
-
 else
     echo "❌ Ошибка: Не удалось создать пакет"
     exit 1
