@@ -1,83 +1,96 @@
 # HotTomatoid - KDE Plasma Timer Widget
 
-Простой таймер для панели задач KDE Plasma с отображением времени в формате "🕓45:00".
+KDE Plasma plasmoid for Pomodoro timer with fast and simple management.
+
+You can EZ adjust the current time slot for work or rest using the scroll wheel or touchpad.
+
+Try to catch a work-life balance!
 
 ## Особенности
 
-- Отображает таймер обратного отсчета на панели задач
-- Запуск/остановка таймера кликом мыши
-- Начинает отсчет с 45 минут
-- Компактный и полноэкранный режим отображения
+- Displays a countdown timer on the taskbar
+- Start/stop the timer with a mouse click
+- The countdown starts at 35 minutes, but with one turn of the wheel you set how much you need.
+- When 00:00 is reached, the timer will show a splashscreen with ajusteble timer.
+- Compact
+- Can be placed on the taskbar or on the Desktop.
 
-## Сборка и установка
 
-1. Сначала соберите пакет с помощью скрипта:
+## INSTALL
+Just drug&drop HotTomatoid.plasmoid to your Task Panel.
+Or run install.sh 
+
+## Build and install (for developers)
+
+1. First, build the package using a script:
 
 ```bash
 ./build_package.sh
+./install.sh
 ```
 
-Это создаст файл `HotTomatoid.plasmoid`.
+This will create the file `HotTomatoid.plasmoid' and will install this.
 
-2. Установите пакет одним из способов:
+2. Install the package using one of the following methods:
 
-**Способ 1: Через командную строку**
+**Method 1: Via the command line**
 ```bash
 
-Чтобы обновить уже установленный плазмоид:
-
+#To update an already installed plasmoid:
 #Upgrade
 plasmapkg2 -u HotTomatoid.plasmoid
 
 #install
 plasmapkg2 -i HotTomatoid.plasmoid
-# или сразу добавить на панель
-plasmapkg2 -t plasmoid -i HotTomatoid.plasmoid
+# or immediately add to the panel
+plasmapkg2 -t plasmoid -i HotTomatoid.plasmoid 
 
-#  и сразу рестартнуть KDE без логофа
+# and immediately restart KDE without logoff
 kquitapp5 plasmashell && plasmashell &
 ```
 
-**Способ 2: Через файловый менеджер**
-Просто дважды щелкните по файлу `HotTomatoid.plasmoid`
+**Method 2: Through the file manager**
+Just double-click on the file `HotTomatoid.plasmoid`
+This method may not work, depending on your settings.
 
-3. После установки:
+3. After installation:
 
-- Нажмите правой кнопкой мыши на панели задач
-- Выберите "Добавить виджеты..."
-- Найдите HotTomatoid в списке
-- Перетащите на панель задач
+- Right-click on the taskbar
+- Select "Add Widgets..."
+- Find the HotTomatoid in the list
+- Drag it to the taskbar
 
-## Использование
+## Usage
 
-- **Клик по виджету**: Запустить/остановить таймер
-- Таймер начинает отсчет с 45:00
-- При достижении 00:00 таймер автоматически останавливается
+- **Widget click**: Start/stop timer
+- The timer starts counting down from 35:00, but with one turn of the wheel you set how much you need.
+- When 00:00 is reached, the timer will show a splashscreen with ajusteble timer.
 
 
-## удалить 
+## delete 
 plasmapkg2 -t plasmoid -r org.kde.plasma.hottomatoid
 kquitapp5 plasmashell && plasmashell &
 
-## Структура проекта
+## Project structure
 
 ```
 HotTomatoid/
-├── build_package.sh         # Скрипт для сборки пакета
-├── README.md               # Этот файл
+├── build_package.sh # Script for building the package
+├── install.sh # Script for install.
+,── README.md # This file
 └── hottomatoid/
     └── package/
-        ├── metadata.json   # Метаданные плагина
+        ├── metadata.json # Plugin metadata
         └── contents/
             └── ui/
-                └── main.qml # Основной файл интерфейса
+                ,── main.qml # Main interface file
 ```
 
-## Требования
+## Requirements
 
-- KDE Plasma 5.12 или новее
-- Qt 5.12 или новее
+- KDE Plasma 5.12 or later
+- Qt 5.12 or later
 
-## Лицензия
+## License
 
 MIT License

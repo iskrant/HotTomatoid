@@ -7,7 +7,7 @@ Item {
     id: root
 
     property int minutes: 35
-    property int seconds: 7
+    property int seconds: 0
     property bool running: false
     property string displayTime
 
